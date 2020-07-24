@@ -24,11 +24,18 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import CameraScreen from './src/Screens/CameraSceen';
-
+import Picker from './src/Screens/Picker'
+import ColorPicker from './src/Components/ColorPicker'
 class App extends Component {
   render() {
     return (
-      <CameraScreen />
+      // <CameraScreen />
+      // <ColorPicker />
+      // <HuePicker />
+      <View>
+        <ColorPicker />
+        {/* <Picker /> */}
+      </View>
     );
   }
 };

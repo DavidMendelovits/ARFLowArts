@@ -20,7 +20,7 @@
 		5FF186EDEE76FBBF2BE514EE /* libPods-ARFlowArts-ARFlowArtsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BADCB2E11A7C51FFABBF173 /* libPods-ARFlowArts-ARFlowArtsTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AF6CC2A124C881B800821BD6 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6CC2A024C881B700821BD6 /* opencv2.framework */; };
-		AF6CC2A224C881B800821BD6 /* opencv2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AF6CC2A024C881B700821BD6 /* opencv2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AF6CC2A924C8848300821BD6 /* RNOpenCvLibrary.mm in Sources */ = {isa = PBXBuildFile; fileRef = AF6CC2A624C8848200821BD6 /* RNOpenCvLibrary.mm */; };
 		E7C1C1953546A5505A65D6AA /* libPods-ARFlowArts-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E7E210F753A73BCCA5CD67C /* libPods-ARFlowArts-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
@@ -40,20 +40,6 @@
 			remoteInfo = "ARFlowArts-tvOS";
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		AF6CC2A324C881B800821BD6 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				AF6CC2A224C881B800821BD6 /* opencv2.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -81,6 +67,9 @@
 		A55D157AF9CD2111ED900724 /* Pods-ARFlowArts-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARFlowArts-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-ARFlowArts-tvOSTests/Pods-ARFlowArts-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		AA713004F9DF0BDCF867696A /* libPods-ARFlowArts.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ARFlowArts.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF6CC2A024C881B700821BD6 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		AF6CC2A624C8848200821BD6 /* RNOpenCvLibrary.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RNOpenCvLibrary.mm; sourceTree = "<group>"; };
+		AF6CC2A724C8848200821BD6 /* RNOpenCvLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNOpenCvLibrary.h; sourceTree = "<group>"; };
+		AF6CC2A824C8848200821BD6 /* PrefixHeader.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EEB0C0025F804AF54CC5F409 /* Pods-ARFlowArts-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ARFlowArts-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-ARFlowArts-tvOS/Pods-ARFlowArts-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -193,7 +182,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				AF6CC2A424C881C800821BD6 /* openCV */,
+				AF6CC2A524C8848200821BD6 /* openCV */,
 				13B07FAE1A68108700A75B9A /* ARFlowArts */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ARFlowArtsTests */,
@@ -217,9 +206,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AF6CC2A424C881C800821BD6 /* openCV */ = {
+		AF6CC2A524C8848200821BD6 /* openCV */ = {
 			isa = PBXGroup;
 			children = (
+				AF6CC2A624C8848200821BD6 /* RNOpenCvLibrary.mm */,
+				AF6CC2A724C8848200821BD6 /* RNOpenCvLibrary.h */,
+				AF6CC2A824C8848200821BD6 /* PrefixHeader.pch */,
 			);
 			path = openCV;
 			sourceTree = "<group>";
@@ -258,7 +250,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				162CDB37D917EEF44B3B2455 /* [CP] Copy Pods Resources */,
-				AF6CC2A324C881B800821BD6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -321,6 +312,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = LS2MX383L8;
 						LastSwiftMigration = 1120;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -596,6 +588,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				AF6CC2A924C8848300821BD6 /* RNOpenCvLibrary.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -683,6 +676,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS2MX383L8;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -712,6 +706,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS2MX383L8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
