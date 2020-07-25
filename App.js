@@ -23,9 +23,10 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Video from './src/Screens/Video'
 import CameraScreen from './src/Screens/CameraSceen';
 import Picker from './src/Screens/Picker'
-import ColorPicker from './src/Components/ColorPicker'
+import ColorPicker from './src/Components/ColorPicker';
 class App extends Component {
   render() {
     return (
@@ -33,7 +34,15 @@ class App extends Component {
       // <ColorPicker />
       // <HuePicker />
       <View>
-        <ColorPicker />
+        {/* <ColorPicker /> */}
+        <Video  source={{uri: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"}}
+                ref={(ref) => {
+                  this.player = ref
+                }}
+                onBuffer={this.onBuffer}
+                onError={this.videoError}
+                style={styles.video}
+        />
         {/* <Picker /> */}
       </View>
     );
@@ -55,6 +64,10 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
+  video: {
+    display: flex,
+    width: '100%'
+  }, 
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',

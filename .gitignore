@@ -22,6 +22,7 @@ DerivedData
 *.xcuserstate
 *.framework
 
+*.mp4 
 # Android/IntelliJ
 #
 build/

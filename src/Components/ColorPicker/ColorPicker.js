@@ -7,7 +7,7 @@ import {
 import PropTypes from 'prop-types';
 import Hue from './Hue';
 import Saturation from './Saturation'
-import Value from './Value';
+import RangeSlider from './RangeSlider';
 
 export default class ColorPicker extends React.Component {
     constructor (props) {
@@ -16,13 +16,17 @@ export default class ColorPicker extends React.Component {
             hue: 0,
             sat: 0,
             val: 1,
-            startHue: 0,
-            endHue: 100
+            startHue: 50,
+            endHue: 100,
+            startSaturation: 0.25,
+            endSaturation: 0.75,
+            startValue: 0.40,
+            endValue: 0.60
         }
-        this.startHue = 0
-        this.endHue = 50
     // this.saturationValuePicker = React.createRef()
         this.onHueChange = this.onHueChange.bind(this)
+        this.onSaturationChange = this.onSaturationChange.bind(this)
+        this.onValueChange = this.onValueChange.bind(this)
         this.colorPicker = React.createRef()
         this.satPicker = React.createRef()
 
@@ -38,6 +42,26 @@ export default class ColorPicker extends React.Component {
         }
         console.log('state: ', this.state)
     }
+    onSaturationChange ({saturation, target}) {
+        console.log('ON SATURATION CHANGE')
+        console.log('saturation: ', saturation)
+        if (target === 'start') {
+            console.log('target : ', target)
+            this.setState({startSaturation: saturation})
+        } else {
+            this.setState({endSaturation: saturation})
+        }
+        console.log('state: ', this.state)
+    }
+    onValueChange ({value, target}) {
+        console.log('------------------------------------------\n\n\n\n')
+        console.log('value: ', value)
+        if (target === 'start') {
+            this.setState({startValue: value})
+        } else {
+            this.setState({endValue: value})
+        }
+    }
     getCurrentColor () {
         // return this.saturationValuePicker.current.getCurrentColor()
         const { hue, saturation, value } = this.props;
@@ -51,7 +75,7 @@ export default class ColorPicker extends React.Component {
         console.log("picker mounted")
     }
     render() {
-        const { hue, sat, val, startHue, endHue } = this.state
+        const { hue, sat, val, startHue, endHue, startSaturation, endSaturation, startValue, endValue } = this.state
         const {
             containerStyle,
             huePickerContainerStyle,
@@ -97,14 +121,20 @@ export default class ColorPicker extends React.Component {
                 />
                 <Saturation 
                     ref={this.satPicker}
+                    onDragMove={this.onSaturationChange}
                     hue={hue}
                     value={val}
                     saturation={sat}
+                    start={startSaturation}
+                    end={endSaturation}
                 />
-                <Value
-                    hue={hue}
-                    value={val}
-                    saturation={sat}
+                <RangeSlider
+                    // hue={hue}
+                    // value={val}
+                    // saturation={sat}
+                    onDragMove={this.onValueChange}
+                    start={startValue}
+                    end={endValue}
                 />
             </View>
         )

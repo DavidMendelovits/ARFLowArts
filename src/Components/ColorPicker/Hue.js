@@ -86,7 +86,7 @@ export default class Hue extends React.Component {
             onPanResponderGrant: (evt, gestureState) => {
                 const { endHue } = this.props
                 this.dragStartValue = endHue
-                // this.fireDragEvent('onDragStart', 'end', gestureState)
+                this.fireDragEvent('onDragStart', 'end', gestureState)
 
             },
             onPanResponderMove: (evt, gestureState) => {
@@ -108,6 +108,7 @@ export default class Hue extends React.Component {
     componentDidUpdate (prevProps) {
         const { hue, barWidth, startHue, endHue } = this.props
         console.log('component Did update: ', prevProps, this.props)
+        console.log(this.props)
         if (prevProps.endHue !== endHue) {
             console.log('end hue is differentQ')
             this.sliderEnd.setValue(barWidth * endHue / 360)

@@ -1,23 +1,22 @@
-import React from 'react'
+import React from 'react';
 import {
-    View,
-    TouchableWithoutFeedback,
-    ViewPropTypes,
-    PanResponder,
-    StyleSheet,
-    Animated,
-  } from 'react-native';
+  View,
+  TouchableWithoutFeedback,
+  ViewPropTypes,
+  PanResponder,
+  StyleSheet,
+  Animated
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PropTypes from 'prop-types';
 import chroma from 'chroma-js';
 import normalizeValue from './utils';
-import Slider from '@react-native-community/slider'
-  
-export default class Saturation extends React.Component {
+
+export default class RangeSlider extends React.Component {
     constructor (props) {
         super (props)
         this.firePressEvent = this.firePressEvent.bind(this)
-        this.sliderStart = new Animated.Value(props.width * (props.start))
+        this.sliderStart = new Animated.Value(props.width * props.start)
         this.panResponderStart = PanResponder.create({
             onStartShouldSetPanResponder: () => true,
             onStartShouldSetPanResponderCapture: () => true,
@@ -25,11 +24,10 @@ export default class Saturation extends React.Component {
             onMoveShouldSetPanResponderCapture: () => true,
             onPanResponderGrant: (evt, gestureState) => {
               const { start } = this.props;
-              this.dragStartValue = start
+              this.dragStartValue = start 
               this.fireDragEvent('onDragStart', 'start', gestureState);
             },
             onPanResponderMove: (evt, gestureState) => {
-              console.log('moving: ', gestureState)
               this.fireDragEvent('onDragMove', 'start', gestureState);
             },
             onPanResponderTerminationRequest: () => true,
@@ -41,7 +39,7 @@ export default class Saturation extends React.Component {
             },
             onShouldBlockNativeResponder: () => true,
         })
-        this.sliderEnd = new Animated.Value(props.width * (props.end))
+        this.sliderEnd = new Animated.Value(props.width * props.end)
         this.panResponderEnd = PanResponder.create({
             onStartShouldSetPanResponder: () => true,
             onStartShouldSetPanResponderCapture: () => true,
@@ -53,8 +51,7 @@ export default class Saturation extends React.Component {
               this.fireDragEvent('onDragStart', 'end', gestureState);
             },
             onPanResponderMove: (evt, gestureState) => {
-                console.log('moving: ', gestureState)
-              this.fireDragEvent('onDragMove', 'ende', gestureState);
+              this.fireDragEvent('onDragMove', 'end', gestureState);
             },
             onPanResponderTerminationRequest: () => true,
             onPanResponderRelease: (evt, gestureState) => {
@@ -67,55 +64,48 @@ export default class Saturation extends React.Component {
         })
     }
     componentDidUpdate (prevProps) {
-        const { start, width, end} = this.props
-        console.log('component is updated....')
-        console.log(this.props)
-        if (prevProps.start !== start) {
-            this.sliderStart.setValue(width * start)
-        } else if (prevProps.end !== end) {
+        const {start, end, width} = this.props
+        if (prevProps.end !== end) {
             this.sliderEnd.setValue(width * end)
-        }
+        } else if (prevProps.start !== start) {
+            this.sliderStart.setValue(width * start) 
+        } 
+        
     }
     getCurrentColor () {
         const { hue, saturation, value } = this.props
         return chroma.hsv(hue, saturation, value).hex()
     }
-    computeSatValDrag (gestureState, target) {
-        console.log('------------------------------------------------------')
-        console.log('HUH')
+    computeValueDrag (gestureState, target) {
         const { dx } = gestureState
         const { width, start, end } = this.props
-        const { dragStartValue } = this
+        const { value } = this.dragStartValue
         const diff = dx / width
-        const updatedSaturation = normalizeValue(dragStartValue + diff)
-        console.log('updated saturation: ', updatedSaturation)
-        let returnSaturation
+        const updatedValue = normalizeValue(this.dragStartValue + diff)
+        let returnValue
         if (target === 'start') {
-            returnSaturation = (updatedSaturation < (end - 0.05))
-                                ? updatedSaturation
-                                : Math.max(end - 0.05, 0)
+            returnValue = (updatedValue < (end - 0.02))
+                            ? updatedValue
+                            : Math.max(end - 0.02)
         } else {
-            returnSaturation = (updatedSaturation > (start + 0.05)
-                                ? updatedSaturation
-                                : Math.min(1, start + 0.05))
+            returnValue = (updatedValue > (start + 0.02))
+                            ? updatedValue
+                            : Math.min(start + 0.02)
         }
-        console.log("return saturation: ", returnSaturation)
-        return returnSaturation
+        console.log('computeValueDrag: ', target, returnValue)
+        return returnValue
     }
-    computeSatValPress (e) {
-        const { nativeEvent } = e
+    computeValuePress (e) {
+        const { nativeEvent } = event
         const { locationX } = nativeEvent
         const { width } = this.props
-        return {
-            saturation: normalizeValue(locationX / width)
-        }
+        return normalizeValue(locationX / width)
     }
     fireDragEvent (eventName, target, gestureState) {
-        console.log('saturation drag event: ', eventName)
         const { [eventName]: event } = this.props
         if (event) {
             event({
-                saturation: this.computeSatValDrag(gestureState, target),
+                value: this.computeValueDrag(gestureState, target),
                 gestureState,
                 target
             })
@@ -125,7 +115,7 @@ export default class Saturation extends React.Component {
         const { onPress } = this.props
         if (onPress) {
             onPress({
-                ...this.computeSatValPress(e),
+                ...this.computeValuePress(e),
                 nativeEvent: e.nativeEvent
             })
         }
@@ -139,90 +129,112 @@ export default class Saturation extends React.Component {
             value,
             saturation,
             containerStyle,
-            borderRadius
+            borderRadius,
+
         } = this.props
+        const spectrum = [
+            '#ff0000',
+            '#ffff00',
+            '#00ff00',
+            '#00ffff',
+            '#0000ff',
+            '#ff00ff',
+            '#ff0000',
+        ]
+        const values = [
+            '#fff',
+            'rgba(0, 0, 0, 0)',
+            '#000',
+        ]
         return (
             <View
                 style={[
                     styles.container,
                     containerStyle,
                     {
-                        height: height,
-                        width: width
+                        height: height + sliderSize,
+                        width: width + sliderSize
                     }
                 ]}
             >
-                <TouchableWithoutFeedback>
-                    <LinearGradient 
-                        style={{width: width, height: height}}
-                        colors={[
-                            '#ff0000',
-                            '#ffff00',
-                            '#00ff00',
-                            '#00ffff',
-                            '#0000ff',
-                            '#ff00ff',
-                            '#ff0000' 
-                        ]}
+                <TouchableWithoutFeedback onPress={this.firePressEvent}>
+                    <LinearGradient
+                        style={{
+                            borderRadius
+                        }}
+                        colors={spectrum}
+                        start={{x: 0, y: 0}}
+                        end={{x: 1, y: 0}}
                     >
                         <LinearGradient
-                            colors={['#000', 'rgba(0, 0, 0, 0)']}
+                            style={{width: width, height: height}}
+                            colors={values}
                             start={{x: 0, y: 0}}
                             end={{x: 1, y: 0}}
                         >
-                            <View style={{width: width, height: height}}/>
+                            <View 
+                                style={{
+                                    height: height,
+                                    width: width
+                                }}
+                            />
                         </LinearGradient>
                     </LinearGradient>
                 </TouchableWithoutFeedback>
                 <Animated.View
-                        {...this.panResponderStart.panHandlers}
-                        style={[
-                            styles.slider,
-                            {
-                                width: sliderSize,
-                                height: sliderSize,
-                                borderRadius: sliderSize / 2,
-                                borderWidth: sliderSize / 10,
-                                backgroundColor: '#000',
-                                transform: [{
-                                    translateX: this.sliderStart
-                                }]
-                            }
-                        ]}
+                    {...this.panResponderStart.panHandlers}
+                    style={[
+                        styles.slider,
+                        {
+                            width: sliderSize,
+                            height: sliderSize,
+                            borderRadius: sliderSize / 2,
+                            borderWidth: sliderSize / 10, 
+                            borderColor: '#000',
+                            backgroundColor: ('#fff'),
+                            transform: [{
+                                translateX: this.sliderStart
+                            }]
+                        }
+                    ]}
                 />
                 <Animated.View
-                        {...this.panResponderEnd.panHandlers}
-                        style={[
-                            styles.slider,
-                            {
-                                width: sliderSize,
-                                height: sliderSize,
-                                borderRadius: sliderSize / 2,
-                                borderWidth: sliderSize / 10,
-                                backgroundColor: '#000',
-                                transform: [{
-                                    translateX: this.sliderEnd
-                                }]
-                            }
-                        ]}
+                    {...this.panResponderEnd.panHandlers}
+                    style={[
+                        styles.slider,
+                        {
+                            width: sliderSize,
+                            height: sliderSize,
+                            borderRadius: sliderSize / 2,
+                            borderWidth: sliderSize / 10, 
+                            borderColor: '#000',
+                            backgroundColor: ('#fff'),
+                            transform: [{
+                                translateX: this.sliderEnd
+                            }]
+                        }
+                    ]}
                 />
             </View>
         )
     }
+
 }
+
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        alignItems: 'center'
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     slider: {
-        left: 0,
-        position: 'absolute',
-        borderColor: '#fff'
-    }
-})
-Saturation.propTypes = {
+      left: 0,
+      position: 'absolute',
+      borderColor: '#fff',
+    },
+  });
+  
+RangeSlider.propTypes = {
     containerStyle: ViewPropTypes.style,
     borderRadius: PropTypes.number,
     width: PropTypes.number,
@@ -238,9 +250,9 @@ Saturation.propTypes = {
     onDragEnd: PropTypes.func,
     onDragTerminate: PropTypes.func,
     onPress: PropTypes.func,
-}
-
-Saturation.defaultProps = {
+};
+  
+RangeSlider.defaultProps = {
     containerStyle: {},
     borderRadius: 0,
     width: 250,
@@ -249,11 +261,12 @@ Saturation.defaultProps = {
     hue: 0,
     saturation: 1,
     value: 1,
-    start: .25,
-    end: .75,
+    start: 0.4,
+    end: 0.6,
     onDragStart: null,
     onDragMove: null,
     onDragEnd: null,
     onDragTerminate: null,
     onPress: null,
-}
+};
+  
