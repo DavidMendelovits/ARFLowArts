@@ -1,23 +1,52 @@
 import React from 'react'
 import {
     View,
+    Text,
     TouchableWithoutFeedback,
     StyleSheet,
     PanResponder,
     Animated,
     ViewPropTypes
 } from 'react-native'
-import Video from 'react-native-video'
 // import Sample from '../assets/backflip1.mp4'
-import FilePicker from './FilePicker'
+import VideoPreview from '../Components/VideoPreview'
+import MediaPicker from 'react-native-image-picker'
 
 export default class Player extends React.Component {
+    state = {
+        videoSource: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'
+    }
     constructor (props) {
         super (props)
         this.onBuffer = this.onBuffer.bind(this)
         this.onError = this.onError.bind(this)
         this.onEnd = this.onError.bind(this)
         this.onProgress = this.onProgress.bind(this)
+        this.selectVideo = this.selectVideo.bind(this)
+    }
+    selectVideo () {
+        const options = {
+            title: 'Video Picker',
+            takePhotoButtonTitle: 'Take Video...',
+            mediaType: 'video',
+            videoQuality: 'medium',
+        }
+
+        MediaPicker.showImagePicker(options, res => {
+            console.log('video selected! -> ', res)
+
+            if (res.didCancel) {
+                console.log('CANCELLED!')
+            } else if (res.error) {
+                console.log('ERROR: ', res.error)
+            } else if (res.customButton) {
+                console.log('custom button used: ', res.customButton)
+            } else {
+                this.setState({
+                    videoSource: res.uri
+                })
+            }
+        })
     }
     onBuffer (arg) {
         // console.log("SAmple:", Sample )
@@ -37,27 +66,16 @@ export default class Player extends React.Component {
     }
 
     render () {
+        const { videoSource } = this.state
         return (
             <View style={styles.container}>
-                <Video
-                    source={{uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4'}}
-                    ref={(ref) => {
-                        this.player = ref
-                    }}
-                    onBuffer={this.onBuffer}
-                    onEnd={this.onEnd}
-                    onError={this.onError}
-                    onProgress={this.onProgress}
-                    controls
-                    style={StyleSheet.absoluteFill}
-               />
+                <VideoPreview source={videoSource} />
                <View>
-                   <TouchableWithoutFeedback>
-                       <View />
+                   <TouchableWithoutFeedback onPress={this.selectVideo.bind(this)}>
+                       <View>
+                           <Text>Select a video!</Text>
+                       </View>
                    </TouchableWithoutFeedback>
-               </View>
-               <View>
-                   <FilePicker style={styles.picker}/>
                </View>
             </View>
         )
