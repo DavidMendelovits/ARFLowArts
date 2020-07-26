@@ -37,8 +37,12 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Can we use use your photo library?</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Can we use your media library?</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Ca we use your microphone?</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Can we use your camera</string>
 	<key>NSDocumentsFolderUsageDescription</key>
